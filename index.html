@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WV — Mark Job Incomplete with Do-Not-Pay sub-option · mockup</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.4.0/dist/tabler-icons.min.css">
+<style>
+  :root {
+    --bg-page: #f6f5f1;
+    --bg-card: #ffffff;
+    --bg-soft: #f1efe8;
+    --bg-info: #e6f1fb;
+    --bg-danger: #fcebeb;
+    --bg-warning: #faeeda;
+    --bg-success: #eaf3de;
+    --text-primary: #1a1a1a;
+    --text-secondary: #5f5e5a;
+    --text-tertiary: #888780;
+    --text-info: #0c447c;
+    --text-danger: #791f1f;
+    --text-warning: #633806;
+    --border: rgba(0,0,0,0.12);
+    --border-strong: rgba(0,0,0,0.25);
+    --border-danger: #f09595;
+    --border-info: #85b7eb;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 2.5rem 1.25rem;
+    background: var(--bg-page);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .canvas { max-width: 760px; margin: 0 auto; }
+  .label { font-size: 12px; color: var(--text-tertiary); margin-bottom: 8px; letter-spacing: 0.02em; }
+  .card { background: var(--bg-card); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1rem 1.25rem; }
+  .header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .title { font-size: 16px; font-weight: 500; }
+  .sub { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+  .pill { font-size: 12px; padding: 4px 10px; border-radius: 999px; background: var(--bg-info); color: var(--text-info); }
+  .summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; font-size: 13px; padding: 12px; background: var(--bg-soft); border-radius: var(--radius-md); margin-bottom: 16px; }
+  .summary .k { color: var(--text-secondary); font-size: 12px; }
+  .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  button { font: inherit; cursor: pointer; background: var(--bg-card); border: 0.5px solid var(--border); border-radius: var(--radius-md); padding: 8px 14px; color: var(--text-primary); transition: background 0.15s; }
+  button:hover { background: var(--bg-soft); }
+  .action-btn { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 12px; text-align: left; }
+  .action-btn .head { display: inline-flex; align-items: center; gap: 6px; font-weight: 500; }
+  .action-btn .desc { font-size: 12px; color: var(--text-secondary); line-height: 1.4; }
+  .modal-frame { background: var(--bg-soft); border-radius: var(--radius-lg); padding: 1.25rem; display: flex; align-items: center; justify-content: center; }
+  .modal { background: var(--bg-card); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1rem 1.25rem; width: 100%; max-width: 560px; }
+  .modal-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .icon-box { width: 36px; height: 36px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; }
+  .icon-box.info { background: var(--bg-info); color: var(--text-info); }
+  .field { margin-bottom: 12px; }
+  .field label { font-size: 13px; color: var(--text-secondary); display: block; margin-bottom: 6px; }
+  select, textarea, input[type="datetime-local"] { width: 100%; font: inherit; padding: 8px 10px; border: 0.5px solid var(--border); border-radius: var(--radius-md); background: var(--bg-card); color: var(--text-primary); }
+  textarea { resize: vertical; min-height: 70px; }
+  .callout { background: var(--bg-warning); border-radius: var(--radius-md); padding: 10px 12px; display: flex; gap: 10px; margin-bottom: 14px; color: var(--text-warning); font-size: 13px; line-height: 1.5; }
+  .checkrow { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; margin-bottom: 16px; color: var(--text-secondary); }
+  .footer { display: flex; justify-content: flex-end; gap: 8px; }
+  .btn-primary { background: var(--bg-info); color: var(--text-info); border-color: var(--border-info); }
+  .btn-danger { background: var(--bg-danger); color: var(--text-danger); border-color: var(--border-danger); }
+  .spacer { height: 1.75rem; }
+
+  /* Sub-decision radio cards */
+  .sub-decision { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .opt {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 12px;
+    cursor: pointer;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: var(--bg-card);
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .opt:hover { border-color: var(--border-strong); }
+  .opt.selected { border: 2px solid var(--border-info); padding: 11px; }
+  .opt.selected.danger { border: 2px solid var(--border-danger); }
+  .opt .dot {
+    width: 16px; height: 16px; border-radius: 50%;
+    border: 1.5px solid var(--border-strong);
+    flex-shrink: 0; margin-top: 2px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .opt.selected .dot { border-color: var(--text-info); }
+  .opt.selected.danger .dot { border-color: var(--text-danger); }
+  .opt.selected .dot::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--text-info); }
+  .opt.selected.danger .dot::after { background: var(--text-danger); }
+  .opt .opt-head { font-weight: 500; font-size: 14px; }
+  .opt .opt-desc { font-size: 12px; color: var(--text-secondary); margin-top: 2px; line-height: 1.4; }
+  .opt.danger .opt-head { color: var(--text-danger); }
+  .badge-new { display: inline-block; background: var(--bg-danger); color: var(--text-danger); font-size: 10px; padding: 1px 6px; border-radius: var(--radius-md); margin-left: 6px; vertical-align: 2px; }
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <!-- Screen 1: WV task panel — only two top-level actions -->
+  <div class="label">Screen 1 — Work verification task panel (unchanged structure)</div>
+  <div class="card">
+    <div class="header-row">
+      <div>
+        <div class="title">Work verification</div>
+        <div class="sub">Work · b05856c6 · Acme Plumbing · HVAC repair</div>
+      </div>
+      <span class="pill">Awaiting OC review</span>
+    </div>
+
+    <div class="summary">
+      <div><div class="k">Provider</div><div>Rivera Mechanical</div></div>
+      <div><div class="k">Tech complete</div><div>Jun 2, 4:18 PM</div></div>
+      <div><div class="k">PI status</div><div>Draft · auto-verify pending</div></div>
+    </div>
+
+    <div class="sub" style="margin-bottom: 10px;">Choose an outcome for this work</div>
+
+    <div class="actions">
+      <button class="action-btn">
+        <span class="head"><i class="ti ti-circle-check" aria-hidden="true" style="font-size: 18px;"></i>Mark job complete</span>
+        <span class="desc">Release provider invoice, close WV.</span>
+      </button>
+      <button class="action-btn">
+        <span class="head"><i class="ti ti-alert-circle" aria-hidden="true" style="font-size: 18px;"></i>Mark job incomplete</span>
+        <span class="desc">Job was not done correctly. Decide what to do next.</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- Screen 2a: Mark Job Incomplete dialog, Reschedule sub-option selected -->
+  <div class="label">Screen 2a — Mark job incomplete · "Reschedule for same provider" selected (default — today's flow)</div>
+  <div class="modal-frame">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="icon-box info"><i class="ti ti-alert-circle" aria-hidden="true" style="font-size: 20px;"></i></div>
+        <div>
+          <div class="title">Mark job incomplete</div>
+          <div class="sub">Pick what should happen with this work.</div>
+        </div>
+      </div>
+
+      <div class="field"><label>What should happen next?</label></div>
+
+      <div class="sub-decision">
+        <div class="opt selected">
+          <div class="dot"></div>
+          <div>
+            <div class="opt-head">Reschedule for same provider</div>
+            <div class="opt-desc">Same provider returns to complete the work.</div>
+          </div>
+        </div>
+        <div class="opt">
+          <div class="dot"></div>
+          <div>
+            <div class="opt-head">Do not pay provider<span class="badge-new">New</span></div>
+            <div class="opt-desc">Block payment, do not reschedule.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Reason</label>
+        <select>
+          <option>Select a reason</option>
+          <option>Work not finished</option>
+          <option>Wrong parts / materials</option>
+          <option>Customer unavailable</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Comments</label>
+        <textarea rows="2" placeholder="Short note for the provider."></textarea>
+      </div>
+
+      <div class="field" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div>
+          <label>Return visit start</label>
+          <input type="datetime-local" />
+        </div>
+        <div>
+          <label>Return visit end</label>
+          <input type="datetime-local" />
+        </div>
+      </div>
+
+      <div class="footer">
+        <button>Cancel</button>
+        <button class="btn-primary">Submit reschedule</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- Screen 2b: Mark Job Incomplete dialog, Do Not Pay sub-option selected -->
+  <div class="label">Screen 2b — Mark job incomplete · "Do not pay provider" selected (new path)</div>
+  <div class="modal-frame">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="icon-box info"><i class="ti ti-alert-circle" aria-hidden="true" style="font-size: 20px;"></i></div>
+        <div>
+          <div class="title">Mark job incomplete</div>
+          <div class="sub">Pick what should happen with this work.</div>
+        </div>
+      </div>
+
+      <div class="field"><label>What should happen next?</label></div>
+
+      <div class="sub-decision">
+        <div class="opt">
+          <div class="dot"></div>
+          <div>
+            <div class="opt-head">Reschedule for same provider</div>
+            <div class="opt-desc">Same provider returns to complete the work.</div>
+          </div>
+        </div>
+        <div class="opt selected danger">
+          <div class="dot"></div>
+          <div>
+            <div class="opt-head">Do not pay provider<span class="badge-new">New</span></div>
+            <div class="opt-desc">Block payment, do not reschedule.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div style="font-size: 14px; font-weight: 500; margin-bottom: 4px;">Reason for no pay will be visible to provider</div>
+        <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 8px;">Make sure to add a clear reason here. Once the job is marked no pay, it cannot be reopened.</div>
+        <label>Reason details <span style="color: var(--text-danger);">*</span></label>
+        <textarea rows="4" maxlength="400" placeholder="Describe what was unacceptable and why no return visit is appropriate."></textarea>
+        <div style="font-size: 12px; color: var(--text-tertiary); margin-top: 4px;">Minimum characters is 50, maximum is 400</div>
+      </div>
+
+      <div class="footer">
+        <button>Cancel</button>
+        <button class="btn-danger">Confirm — do not pay</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
